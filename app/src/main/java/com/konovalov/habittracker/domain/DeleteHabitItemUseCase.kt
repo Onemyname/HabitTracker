@@ -1,7 +1,8 @@
 package com.konovalov.habittracker.domain
 
-class DeleteHabitItemUseCase {
+class DeleteHabitItemUseCase(private val habitListRepository: HabitListRepository) {
     fun deleteHabitItem(habitItem: HabitItem){
-        TODO()
+        habitListRepository.deleteHabitItem(habitItem)
     }
+
 }

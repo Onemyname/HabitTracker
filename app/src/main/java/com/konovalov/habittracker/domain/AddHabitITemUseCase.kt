@@ -1,7 +1,8 @@
 package com.konovalov.habittracker.domain
 
-class AddHabitITemUseCase {
+class AddHabitITemUseCase(private val habitListRepository: HabitListRepository) {
     fun addHabitItem(habitItem: HabitItem){
-        TODO()
+        habitListRepository.addHabitItem(habitItem)
     }
+
 }
