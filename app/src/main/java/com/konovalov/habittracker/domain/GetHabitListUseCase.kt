@@ -1,6 +1,8 @@
 package com.konovalov.habittracker.domain
 
+import androidx.lifecycle.LiveData
+
 class GetHabitListUseCase(private val habitListRepository: HabitListRepository)  {
-    fun getHabitList() : List<HabitItem> = habitListRepository.getHabitList()
+    fun getHabitList() : LiveData<List<HabitItem>> = habitListRepository.getHabitList()
 
 }

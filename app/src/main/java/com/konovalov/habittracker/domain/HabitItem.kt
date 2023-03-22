@@ -1,10 +1,22 @@
 package com.konovalov.habittracker.domain
 
+
+
 data class HabitItem (
-    val id: Int,
+
     val name: String,
     val count: Number,
     val unit: String,
-    val isEnabled: Boolean
-        ){
+    var isEnabled: Boolean,
+    var id: Int = UNDEFINED_ID
+){
+    companion object{
+        private const val UNDEFINED_ID = -1
+
+        fun getUndefinedId(): Int {
+            return UNDEFINED_ID
+        }
+    }
+
+
 }
