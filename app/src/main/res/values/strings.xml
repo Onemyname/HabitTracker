@@ -2,4 +2,5 @@
     <string name="app_name">Habit Tracker</string>
     <string name="add_new_habit_item">Add new habit item</string>
     <string name="habit">habit</string>
+    <string name="list_of_habits">List of habits</string>
 </resources>
