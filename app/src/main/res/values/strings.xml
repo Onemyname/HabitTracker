@@ -3,4 +3,6 @@
     <string name="add_new_habit_item">Add new habit item</string>
     <string name="habit">habit</string>
     <string name="list_of_habits">List of habits</string>
+    <string name="empty_habit">Unnamed habit</string>
+    <string name="three_points">...</string>
 </resources>

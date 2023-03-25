@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.konovalov.habittracker.domain.HabitItem
 import com.konovalov.habittracker.domain.HabitListRepository
+import kotlin.random.Random
 
 object HabitListRepositoryImpl : HabitListRepository{
     private val habitListLD = MutableLiveData<List<HabitItem>>()
@@ -11,8 +12,8 @@ object HabitListRepositoryImpl : HabitListRepository{
     private var autoIncrementId = 0
 
     init{
-        for (i in 0 until 3){
-            val item = HabitItem("Name $i", i, "unit",true)
+        for (i in 0 until 100){
+            val item = HabitItem("Name $i", i, "unit", Random.nextBoolean())
             addHabitItem(item)
         }
     }

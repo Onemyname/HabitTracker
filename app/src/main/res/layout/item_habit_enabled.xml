@@ -27,7 +27,7 @@
             android:textColor="@color/white"
             android:textSize="16sp"
             android:textStyle="bold"
-            tools:text="Салфетки" />
+            tools:text="@string/empty_habit" />
 
         <TextView
             android:id="@+id/tv_count"
@@ -37,6 +37,7 @@
             android:textSize="16sp"
             android:textStyle="bold"
             tools:text="1" />
+
         <TextView
             android:id="@+id/tv_unit"
             android:layout_width="wrap_content"
