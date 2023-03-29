@@ -2,30 +2,21 @@ package com.konovalov.habittracker.presentation
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.ListAdapter
 import com.konovalov.habittracker.R
 import com.konovalov.habittracker.domain.HabitItem
 
-class HabitListAdapter: RecyclerView.Adapter<HabitListAdapter.HabitItemViewHolder>() {
+class HabitListAdapter: ListAdapter<HabitItem, HabitItemViewHolder>(HabitItemDiffCallBack()) {
 
-    var habitList = listOf<HabitItem>()
-    set(value){
-        val callBack = HabitListDiffCallBack(habitList,value)
-        val diffResult = DiffUtil.calculateDiff(callBack)
-        diffResult.dispatchUpdatesTo(this)
-        field = value
+    companion object{
+        const val ENABLED_VIEW_TYPE = 1
+        const val DISABLED_VIEW_TYPE = -1
+        const val MAX_POOL_SIZE = 15
     }
 
     var onHabitItemLongClickListener :((HabitItem) -> Unit)? = null
     var onHabitItemClickListener : ((HabitItem)->Unit)? = null
-
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HabitItemViewHolder {
         val layout = when(viewType){
@@ -39,14 +30,16 @@ class HabitListAdapter: RecyclerView.Adapter<HabitListAdapter.HabitItemViewHolde
     }
 
     override fun getItemViewType(position: Int): Int {
-        val enabled = habitList[position].isEnabled
+        val enabled = getItem(position).isEnabled
+
         return if(enabled)  ENABLED_VIEW_TYPE else DISABLED_VIEW_TYPE
     }
 
 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: HabitItemViewHolder, position: Int) {
-        val habitItem = habitList[position]
+        val habitItem = getItem(position)
+
         with(holder){
             tvName.text = habitItem.name
             tvCount.text = habitItem.count.toString()
@@ -60,32 +53,6 @@ class HabitListAdapter: RecyclerView.Adapter<HabitListAdapter.HabitItemViewHolde
         holder.view.setOnClickListener{
             onHabitItemClickListener?.invoke(habitItem)
         }
-
-    }
-
-    override fun getItemCount(): Int = habitList.size
-
-    override fun onViewRecycled(holder: HabitItemViewHolder) {
-        super.onViewRecycled(holder)
-        holder.tvName.text = ""
-        holder.tvCount.text = ""
-        holder.tvUnit.text = ""
-        holder.tvName.setTextColor(ContextCompat.getColor(
-            holder.view.context,
-            android.R.color.white))
-    }
-
-
-    class HabitItemViewHolder(val view: View): RecyclerView.ViewHolder(view){
-        val tvName = view.findViewById<TextView>(R.id.tv_name)
-        val tvCount = view.findViewById<TextView>(R.id.tv_count)
-        val tvUnit = view.findViewById<TextView>(R.id.tv_unit)
-    }
-
-    companion object{
-        const val ENABLED_VIEW_TYPE = 1
-        const val DISABLED_VIEW_TYPE = -1
-        const val MAX_POOL_SIZE = 15
     }
 }
 

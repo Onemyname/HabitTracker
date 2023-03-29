@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
         setupRecyclerView()
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
         viewModel.habitList.observe(this){
-            habitListAdapter.habitList = it
+            habitListAdapter.submitList(it)
         }
     }
 
@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val item = habitListAdapter.habitList[viewHolder.adapterPosition]
+                val item = habitListAdapter.currentList[viewHolder.adapterPosition]
                 viewModel.deleteHabitItem(item)
             }
         }
