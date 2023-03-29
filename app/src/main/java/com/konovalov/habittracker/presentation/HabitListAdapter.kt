@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.konovalov.habittracker.R
 import com.konovalov.habittracker.domain.HabitItem
@@ -14,12 +16,16 @@ class HabitListAdapter: RecyclerView.Adapter<HabitListAdapter.HabitItemViewHolde
 
     var habitList = listOf<HabitItem>()
     set(value){
+        val callBack = HabitListDiffCallBack(habitList,value)
+        val diffResult = DiffUtil.calculateDiff(callBack)
+        diffResult.dispatchUpdatesTo(this)
         field = value
-        notifyDataSetChanged()
     }
 
     var onHabitItemLongClickListener :((HabitItem) -> Unit)? = null
     var onHabitItemClickListener : ((HabitItem)->Unit)? = null
+
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HabitItemViewHolder {
         val layout = when(viewType){

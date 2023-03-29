@@ -5,9 +5,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.ItemTouchHelper as I_T_H
 import androidx.recyclerview.widget.RecyclerView
 import com.konovalov.habittracker.R
-import com.konovalov.habittracker.domain.HabitItem
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -37,13 +38,44 @@ class MainActivity : AppCompatActivity() {
             recycledViewPool.setMaxRecycledViews(disabledView,poolSize)
         }
 
-        habitListAdapter.onHabitItemLongClickListener = {
-                viewModel.changeEnableState(it)
+        setupOnLongClick()
+
+        setupOnFastClick()
+
+        setupSwipe(rvHabitList)
+
+
+    }
+
+    private fun setupSwipe(rvHabitList: RecyclerView) {
+        val callBack = object : I_T_H.SimpleCallback(0, I_T_H.LEFT.or(I_T_H.RIGHT)) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return false
             }
 
-        habitListAdapter.onHabitItemClickListener = {
-                Log.d("MainActivity", it.toString())
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val item = habitListAdapter.habitList[viewHolder.adapterPosition]
+                viewModel.deleteHabitItem(item)
+            }
         }
 
+        val itemTouchHelper = I_T_H(callBack)
+        itemTouchHelper.attachToRecyclerView(rvHabitList)
+    }
+
+    private fun setupOnFastClick() {
+        habitListAdapter.onHabitItemClickListener = {
+            TODO()
         }
     }
+
+    private fun setupOnLongClick() {
+        habitListAdapter.onHabitItemLongClickListener = {
+            viewModel.changeEnableState(it)
+        }
+    }
+}
