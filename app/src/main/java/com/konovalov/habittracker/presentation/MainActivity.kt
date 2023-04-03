@@ -71,7 +71,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupOnFastClick() {
         habitListAdapter.onHabitItemClickListener = {
-            TODO()
+//            TODO()
         }
     }
 

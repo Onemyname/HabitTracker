@@ -13,7 +13,7 @@ object HabitListRepositoryImpl : HabitListRepository{
 
     init{
         for (i in 0 until 100){
-            val item = HabitItem("Name $i", i, "unit", Random.nextBoolean())
+            val item = HabitItem("Name $i", i, Random.nextBoolean())
             addHabitItem(item)
         }
     }
@@ -23,11 +23,11 @@ object HabitListRepositoryImpl : HabitListRepository{
         return habitListLD
     }
 
-    override fun getHabitItem(habitItemId: Int): HabitItem {
+    override fun getHabitItem(id: Int): HabitItem {
 
        return habitList.find {
-           it.id == habitItemId
-       } ?: throw java.lang.RuntimeException("Element with $habitItemId not found")
+           it.id == id
+       } ?: throw java.lang.RuntimeException("Element with $id not found")
     }
 
     override fun addHabitItem(habitItem: HabitItem) {

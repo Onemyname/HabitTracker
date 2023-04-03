@@ -43,7 +43,7 @@ class HabitListAdapter: ListAdapter<HabitItem, HabitItemViewHolder>(HabitItemDif
         with(holder){
             tvName.text = habitItem.name
             tvCount.text = habitItem.count.toString()
-            tvUnit.text = " ${habitItem.unit}"
+//            tvUnit.text = " ${habitItem.unit}"
         }
 
         holder.view.setOnLongClickListener{

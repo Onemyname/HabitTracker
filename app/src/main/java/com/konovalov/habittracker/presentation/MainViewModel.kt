@@ -1,6 +1,5 @@
 package com.konovalov.habittracker.presentation
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.konovalov.habittracker.data.HabitListRepositoryImpl
 import com.konovalov.habittracker.domain.DeleteHabitItemUseCase
