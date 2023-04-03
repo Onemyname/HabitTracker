@@ -15,7 +15,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/purple_200"
+        android:background="@color/steel_blue"
         android:orientation="horizontal"
         android:padding="16dp">
 
@@ -24,7 +24,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textColor="@color/white"
+            android:textColor="@color/light_cyan"
             android:textSize="16sp"
             android:textStyle="bold"
             tools:text="@string/empty_habit" />
@@ -33,7 +33,7 @@
             android:id="@+id/tv_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"
+            android:textColor="@color/light_cyan"
             android:textSize="16sp"
             android:textStyle="bold"
             tools:text="1" />
@@ -42,7 +42,7 @@
             android:id="@+id/tv_unit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"
+            android:textColor="@color/light_cyan"
             android:textSize="16sp"
             android:textStyle="bold"
             tools:text="1" />

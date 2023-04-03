@@ -1,8 +1,10 @@
 <resources>
     <string name="app_name">Habit Tracker</string>
     <string name="add_new_habit_item">Add new habit item</string>
-    <string name="habit">habit</string>
+    <string name="habit">Habit…</string>
     <string name="list_of_habits">List of habits</string>
     <string name="empty_habit">Unnamed habit</string>
-    <string name="three_points">...</string>
+    <string name="three_points">…</string>
+    <string name="save">Save</string>
+    <string name="count">Count…</string>
 </resources>
