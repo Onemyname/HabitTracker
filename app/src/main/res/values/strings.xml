@@ -7,4 +7,6 @@
     <string name="three_points">…</string>
     <string name="save">Save</string>
     <string name="count">Count…</string>
+    <string name="error_input_count">Incorrect count</string>
+    <string name="error_input_name">Incorrect name</string>
 </resources>

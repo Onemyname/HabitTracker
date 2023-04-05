@@ -1,43 +1,49 @@
 package com.konovalov.habittracker.presentation
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import android.widget.Button
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper as I_T_H
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.textfield.TextInputLayout
 import com.konovalov.habittracker.R
-
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var viewModel: MainViewModel
     private lateinit var habitListAdapter: HabitListAdapter
+
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-//        setContentView(R.layout.activity_habit_item)
-
         setupRecyclerView()
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
-        viewModel.habitList.observe(this){
+        viewModel.habitList.observe(this) {
             habitListAdapter.submitList(it)
+        }
+        val addButton: FloatingActionButton = findViewById(R.id.button_add_habit_item)
+        addButton.setOnClickListener {
+            val intent = HabitItemActivity.newIntentAddItem(this)
+            startActivity(intent)
         }
     }
 
-    private fun setupRecyclerView(){
+    private fun setupRecyclerView() {
         val rvHabitList = findViewById<RecyclerView>(R.id.rv_habit_list)
         val enabledView = HabitListAdapter.ENABLED_VIEW_TYPE
         val disabledView = HabitListAdapter.DISABLED_VIEW_TYPE
         val poolSize = HabitListAdapter.MAX_POOL_SIZE
         habitListAdapter = HabitListAdapter()
 
-        with(rvHabitList){
+        with(rvHabitList) {
             adapter = habitListAdapter
-            recycledViewPool.setMaxRecycledViews(enabledView,poolSize)
-            recycledViewPool.setMaxRecycledViews(disabledView,poolSize)
+            recycledViewPool.setMaxRecycledViews(enabledView, poolSize)
+            recycledViewPool.setMaxRecycledViews(disabledView, poolSize)
         }
 
         setupOnLongClick()
@@ -71,7 +77,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupOnFastClick() {
         habitListAdapter.onHabitItemClickListener = {
-//            TODO()
+            val intent = HabitItemActivity.newIntentEditItem(this, it.id)
+            startActivity(intent)
         }
     }
 
