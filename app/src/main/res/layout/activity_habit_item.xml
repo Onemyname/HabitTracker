@@ -19,8 +19,9 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:shapeAppearanceOverlay="@style/TextInputLayoutShape"
-        app:layout_constraintVertical_chainStyle="packed">
+        app:hintTextColor="@color/light_cyan"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:shapeAppearanceOverlay="@style/TextInputLayoutShape">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_name"
@@ -39,22 +40,24 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="4dp"
-        app:layout_constraintBottom_toTopOf="@+id/button"
+        app:layout_constraintBottom_toTopOf="@+id/save_button"
         app:layout_constraintTop_toBottomOf="@+id/til_name"
+        app:hintTextColor="@color/light_cyan"
         app:shapeAppearanceOverlay="@style/TextInputLayoutShape">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_count"
             android:layout_width="match_parent"
-            android:background="@color/steel_blue"
             android:layout_height="wrap_content"
-            android:hint="@string/count" />
+            android:background="@color/steel_blue"
+            android:hint="@string/count"
+            android:textColorHint="@color/light_cyan"/>
 
 
     </com.google.android.material.textfield.TextInputLayout>
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/button"
+        android:id="@+id/save_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
