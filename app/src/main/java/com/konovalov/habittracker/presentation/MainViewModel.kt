@@ -7,7 +7,7 @@ import com.konovalov.habittracker.domain.EditHabitItemUseCase
 import com.konovalov.habittracker.domain.GetHabitListUseCase
 import com.konovalov.habittracker.domain.HabitItem
 
-class MainViewModel: ViewModel() {
+class MainViewModel : ViewModel() {
 
     private val repository = HabitListRepositoryImpl
 
@@ -18,11 +18,11 @@ class MainViewModel: ViewModel() {
     val habitList = getHabitListUseCase.getHabitList()
 
 
-    fun deleteHabitItem(habitItem: HabitItem){
-       deleteHabitItemUseCase.deleteHabitItem(habitItem)
+    fun deleteHabitItem(habitItem: HabitItem) {
+        deleteHabitItemUseCase.deleteHabitItem(habitItem)
     }
 
-    fun changeEnableState(habitItem: HabitItem){
+    fun changeEnableState(habitItem: HabitItem) {
         val newItem = habitItem.copy(isEnabled = !habitItem.isEnabled)
         editHabitItemUseCase.editHabitItem(newItem)
     }
