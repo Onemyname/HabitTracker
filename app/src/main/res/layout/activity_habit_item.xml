@@ -1,73 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<androidx.fragment.app.FragmentContainerView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/habit_item_container"
+    android:name ="com.konovalov.habittracker.presentation.HabitItemFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/light_cyan">
-
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_name"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="4dp"
-        app:layout_constraintBottom_toTopOf="@+id/til_count"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:hintTextColor="@color/light_cyan"
-        app:layout_constraintVertical_chainStyle="packed"
-        app:shapeAppearanceOverlay="@style/TextInputLayoutShape">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/et_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/steel_blue"
-            android:hint="@string/habit" />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_count"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="4dp"
-        app:layout_constraintBottom_toTopOf="@+id/save_button"
-        app:layout_constraintTop_toBottomOf="@+id/til_name"
-        app:hintTextColor="@color/light_cyan"
-        app:shapeAppearanceOverlay="@style/TextInputLayoutShape">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/et_count"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/steel_blue"
-            android:hint="@string/count"
-            android:textColorHint="@color/light_cyan"/>
-
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/save_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="4dp"
-        android:background="@color/steel_blue"
-        android:text="@string/save"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/til_count"
-        tools:layout_editor_absoluteX="8dp" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    android:background="@color/light_cyan"
+    tools:context=".presentation.HabitItemActivity"
+    tools:layout="@layout/fragment_habit_item" />
