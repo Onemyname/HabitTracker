@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import androidx.core.view.OneShotPreDrawListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.textfield.TextInputLayout
@@ -19,6 +20,8 @@ import com.konovalov.habittracker.domain.HabitItem
 class HabitItemFragment : Fragment() {
 
     private lateinit var viewModel: HabitItemViewModel
+    private lateinit var onEditingFinishedListener: OnEditingFinishedListener
+
     private lateinit var tilName: TextInputLayout
     private lateinit var tilCount: TextInputLayout
     private lateinit var etName: EditText
@@ -27,6 +30,16 @@ class HabitItemFragment : Fragment() {
 
     private var screenMode: String = MODE_UNKNOWN
     private var habitItemId: Int = HabitItem.getUndefinedId()
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if(context is OnEditingFinishedListener){
+            onEditingFinishedListener = context
+        }
+        else{
+            throw RuntimeException("Activity must implement OnEditingFinishedListener")
+        }
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         parseParameters()
@@ -71,7 +84,7 @@ class HabitItemFragment : Fragment() {
         }
 
         viewModel.shouldCloseScreen.observe(viewLifecycleOwner) {
-            activity?.onBackPressed()
+            onEditingFinishedListener.onEditingFinished()
         }
     }
 
@@ -135,6 +148,9 @@ class HabitItemFragment : Fragment() {
         saveButton = view.findViewById(R.id.save_button)
     }
 
+    interface OnEditingFinishedListener{
+        fun onEditingFinished()
+    }
     companion object {
         private const val SCREEN_MODE = "extra_mode"
         private const val MODE_EDIT = "mode_edit"

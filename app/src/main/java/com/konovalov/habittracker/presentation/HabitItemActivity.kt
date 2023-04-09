@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.konovalov.habittracker.R
 import com.konovalov.habittracker.domain.HabitItem
 
-class HabitItemActivity : AppCompatActivity() {
+class HabitItemActivity : AppCompatActivity(),HabitItemFragment.OnEditingFinishedListener {
 
     private var screenMode = MODE_UNKNOWN
     private var habitItemId = HabitItem.getUndefinedId()
@@ -75,5 +75,9 @@ class HabitItemActivity : AppCompatActivity() {
             habitItemId = intent.getIntExtra(EXTRA_HABIT_ITEM_ID, -1)
         }
 
+    }
+
+    override fun onEditingFinished() {
+        finish()
     }
 }
