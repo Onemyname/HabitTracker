@@ -16,29 +16,33 @@ import com.google.android.material.textfield.TextInputLayout
 import com.konovalov.habittracker.R
 import com.konovalov.habittracker.domain.HabitItem
 
-class HabitItemFragment: Fragment() {
+class HabitItemFragment : Fragment() {
 
     private lateinit var viewModel: HabitItemViewModel
-
     private lateinit var tilName: TextInputLayout
     private lateinit var tilCount: TextInputLayout
     private lateinit var etName: EditText
     private lateinit var etCount: EditText
     private lateinit var saveButton: Button
 
-    private var screenMode = MODE_UNKNOWN
-    private var habitItemId = HabitItem.getUndefinedId()
+    private var screenMode: String = MODE_UNKNOWN
+    private var habitItemId: Int = HabitItem.getUndefinedId()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        parseParameters()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         return inflater.inflate(R.layout.fragment_habit_item, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        parseParameters()
         viewModel = ViewModelProvider(this)[HabitItemViewModel::class.java]
         initViews(view)
         addTextChangeListeners()
@@ -67,7 +71,7 @@ class HabitItemFragment: Fragment() {
         }
 
         viewModel.shouldCloseScreen.observe(viewLifecycleOwner) {
-//            finish()
+            activity?.onBackPressed()
         }
     }
 
@@ -132,33 +136,50 @@ class HabitItemFragment: Fragment() {
     }
 
     companion object {
-        private const val EXTRA_SCREEN_MODE = "extra_mode"
+        private const val SCREEN_MODE = "extra_mode"
         private const val MODE_EDIT = "mode_edit"
         private const val MODE_ADD = "mode_add"
-        private const val EXTRA_HABIT_ITEM_ID = "extra_habit_item_id"
+        private const val HABIT_ITEM_ID = "extra_habit_item_id"
         private const val MODE_UNKNOWN = ""
 
-        fun newIntentAddItem(context: Context): Intent {
-            val intent = Intent(context, HabitItemActivity::class.java)
-            intent.putExtra(EXTRA_SCREEN_MODE, MODE_ADD)
-            return intent
+        fun newInstanceAddItem(): HabitItemFragment {
+
+            return HabitItemFragment().apply {
+                arguments = Bundle().apply {
+                    putString(SCREEN_MODE, MODE_ADD)
+                }
+            }
         }
 
-        fun newIntentEditItem(context: Context, habitItemId: Int): Intent {
-            val intent = Intent(context, HabitItemActivity::class.java)
-            intent.putExtra(EXTRA_SCREEN_MODE, MODE_EDIT)
-            intent.putExtra(EXTRA_HABIT_ITEM_ID, habitItemId)
-            return intent
+        fun newInstanceEditItem(habitItemId: Int): HabitItemFragment {
+            return HabitItemFragment().apply {
+                arguments = Bundle().apply {
+                    putString(SCREEN_MODE, MODE_EDIT)
+                    putInt(HABIT_ITEM_ID, habitItemId)
+                }
+            }
         }
     }
 
 
     private fun parseParameters() {
-        if (screenMode != MODE_EDIT && screenMode != MODE_ADD) {
-            throw java.lang.RuntimeException("Param habit item id is absent")
+        val args = requireArguments()
+        if (!args.containsKey(SCREEN_MODE)) {
+            throw RuntimeException("Param screen mode is absent")
         }
-        if (screenMode == MODE_EDIT && habitItemId == HabitItem.getUndefinedId()) {
-            throw java.lang.RuntimeException("Param habit item id is absent")
+
+        val mode = args.getString(SCREEN_MODE)
+        if (mode != MODE_EDIT && mode != MODE_ADD) {
+            throw RuntimeException("Unknown screen mode $screenMode")
         }
+
+        screenMode = mode
+        if(screenMode == MODE_EDIT){
+            if(!args.containsKey(HABIT_ITEM_ID)){
+                    throw RuntimeException("Param habit item id is absent")
+                }
+            habitItemId = args.getInt(HABIT_ITEM_ID, HabitItem.getUndefinedId())
+        }
+
     }
 }
