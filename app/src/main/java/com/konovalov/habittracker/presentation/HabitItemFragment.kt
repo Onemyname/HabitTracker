@@ -1,10 +1,12 @@
 package com.konovalov.habittracker.presentation
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,7 +22,7 @@ import com.konovalov.habittracker.domain.HabitItem
 class HabitItemFragment : Fragment() {
 
     private lateinit var viewModel: HabitItemViewModel
-    private lateinit var onEditingFinishedListener: OnEditingFinishedListener
+    private var onEditingFinishedListener: OnEditingFinishedListener? = null
 
     private lateinit var tilName: TextInputLayout
     private lateinit var tilCount: TextInputLayout
@@ -33,13 +35,18 @@ class HabitItemFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if(context is OnEditingFinishedListener){
+        if (context is OnEditingFinishedListener) {
             onEditingFinishedListener = context
-        }
-        else{
+        } else {
             throw RuntimeException("Activity must implement OnEditingFinishedListener")
         }
     }
+
+    override fun onDetach() {
+        super.onDetach()
+        onEditingFinishedListener = null
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         parseParameters()
@@ -50,7 +57,6 @@ class HabitItemFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         return inflater.inflate(R.layout.fragment_habit_item, container, false)
     }
 
@@ -84,7 +90,7 @@ class HabitItemFragment : Fragment() {
         }
 
         viewModel.shouldCloseScreen.observe(viewLifecycleOwner) {
-            onEditingFinishedListener.onEditingFinished()
+            onEditingFinishedListener?.onEditingFinished()
         }
     }
 
@@ -148,10 +154,12 @@ class HabitItemFragment : Fragment() {
         saveButton = view.findViewById(R.id.save_button)
     }
 
-    interface OnEditingFinishedListener{
+    interface OnEditingFinishedListener {
         fun onEditingFinished()
     }
+
     companion object {
+        private var count = 0
         private const val SCREEN_MODE = "extra_mode"
         private const val MODE_EDIT = "mode_edit"
         private const val MODE_ADD = "mode_add"
@@ -190,12 +198,13 @@ class HabitItemFragment : Fragment() {
         }
 
         screenMode = mode
-        if(screenMode == MODE_EDIT){
-            if(!args.containsKey(HABIT_ITEM_ID)){
-                    throw RuntimeException("Param habit item id is absent")
-                }
+        if (screenMode == MODE_EDIT) {
+            if (!args.containsKey(HABIT_ITEM_ID)) {
+                throw RuntimeException("Param habit item id is absent")
+            }
             habitItemId = args.getInt(HABIT_ITEM_ID, HabitItem.getUndefinedId())
         }
 
     }
+
 }
