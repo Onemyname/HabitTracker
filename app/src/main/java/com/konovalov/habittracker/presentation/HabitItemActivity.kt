@@ -4,26 +4,11 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
-import android.widget.Button
-import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
-import com.google.android.material.textfield.TextInputLayout
 import com.konovalov.habittracker.R
 import com.konovalov.habittracker.domain.HabitItem
 
-class HabitItemActivity : AppCompatActivity() {
-
-    private lateinit var viewModel: HabitItemViewModel
-
-
-    private lateinit var tilName: TextInputLayout
-    private lateinit var tilCount: TextInputLayout
-    private lateinit var etName: EditText
-    private lateinit var etCount: EditText
-    private lateinit var saveButton: Button
+class HabitItemActivity : AppCompatActivity(),HabitItemFragment.OnEditingFinishedListener {
 
     private var screenMode = MODE_UNKNOWN
     private var habitItemId = HabitItem.getUndefinedId()
@@ -32,12 +17,9 @@ class HabitItemActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_habit_item)
-        parseInt()
-        viewModel = ViewModelProvider(this)[HabitItemViewModel::class.java]
-        initViews()
-        addTextChangeListeners()
-        launchMode()
-        observeViewModel()
+        parseIntent()
+        if(savedInstanceState == null) launchMode()
+
     }
 
     companion object {
@@ -61,70 +43,19 @@ class HabitItemActivity : AppCompatActivity() {
         }
     }
 
-    private fun initViews() {
-        tilName = findViewById(R.id.til_name)
-        tilCount = findViewById(R.id.til_count)
-        etCount = findViewById(R.id.et_count)
-        etName = findViewById(R.id.et_name)
-        saveButton = findViewById(R.id.save_button)
-    }
-
-    private fun observeViewModel() {
-        viewModel.errorInputName.observe(this) {
-            val message = if (it) {
-                getString(R.string.error_input_name)
-            } else {
-                null
-            }
-            tilName.error = message
-
-        }
-
-        viewModel.errorInputCount.observe(this) {
-            val message = if (it) {
-                getString(R.string.error_input_count)
-            } else {
-                null
-            }
-            tilCount.error = message
-        }
-
-        viewModel.shouldCloseScreen.observe(this) {
-            finish()
-        }
-    }
 
     private fun launchMode() {
-        when (screenMode) {
-            MODE_EDIT -> launchEditMode()
-            MODE_ADD -> launchAddMode()
+        val fragment = when (screenMode) {
+            MODE_EDIT -> HabitItemFragment.newInstanceEditItem(habitItemId)
+            MODE_ADD -> HabitItemFragment.newInstanceAddItem()
+            else-> throw RuntimeException("Unknown screen mode: $screenMode")
         }
+    supportFragmentManager.beginTransaction()
+        .replace(R.id.habit_item_container, fragment)
+        .commit()
     }
 
-    private fun launchEditMode() {
-        viewModel.getHabitItem(habitItemId)
-        viewModel.habitItem.observe(this) {
-            etName.setText(it.name)
-            etCount.setText(it.count.toString())
-        }
-
-        saveButton.setOnClickListener {
-            val newInputName = etName.text?.toString()
-            val newInputCount = etCount.text?.toString()
-            viewModel.editHabitItem(newInputName, newInputCount)
-
-        }
-    }
-
-    private fun launchAddMode() {
-        saveButton.setOnClickListener {
-            val inputName = etName.text?.toString()
-            val inputCount = etCount.text?.toString()
-            viewModel.addHabitItem(inputName, inputCount)
-        }
-    }
-
-    private fun parseInt() {
+    private fun parseIntent() {
         if (!intent.hasExtra(EXTRA_SCREEN_MODE)) {
             throw java.lang.RuntimeException("Param screen mode is absent")
         }
@@ -146,33 +77,7 @@ class HabitItemActivity : AppCompatActivity() {
 
     }
 
-    private fun addTextChangeListeners() {
-        etName.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
-            }
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                viewModel.resetErrorInputName()
-            }
-
-            override fun afterTextChanged(p0: Editable?) {
-
-            }
-
-        })
-        etCount.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
-            }
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                viewModel.resetErrorInputCount()
-            }
-
-            override fun afterTextChanged(p0: Editable?) {
-
-            }
-        })
+    override fun onEditingFinished() {
+        finish()
     }
 }

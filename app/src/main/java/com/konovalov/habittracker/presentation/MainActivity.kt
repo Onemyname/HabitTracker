@@ -5,6 +5,10 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import android.widget.Toast
+import androidx.core.view.get
+import androidx.fragment.app.FragmentContainer
+import androidx.fragment.app.FragmentContainerView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper as I_T_H
 import androidx.recyclerview.widget.RecyclerView
@@ -12,15 +16,17 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputLayout
 import com.konovalov.habittracker.R
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), HabitItemFragment.OnEditingFinishedListener {
 
     private lateinit var viewModel: MainViewModel
     private lateinit var habitListAdapter: HabitListAdapter
+    private var habitItemContainer: FragmentContainerView? = null
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        habitItemContainer = findViewById(R.id.habit_item_container)
         setupRecyclerView()
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
         viewModel.habitList.observe(this) {
@@ -28,8 +34,33 @@ class MainActivity : AppCompatActivity() {
         }
         val addButton: FloatingActionButton = findViewById(R.id.button_add_habit_item)
         addButton.setOnClickListener {
-            val intent = HabitItemActivity.newIntentAddItem(this)
-            startActivity(intent)
+            if(isOnePaneMode()) {
+                val intent = HabitItemActivity.newIntentAddItem(this)
+                startActivity(intent)
+            }
+            else{
+                launchFragment(HabitItemFragment.newInstanceAddItem())
+                }
+
+            }
+        }
+
+    override fun onEditingFinished() {
+        Toast.makeText(this@MainActivity, "Success", Toast.LENGTH_SHORT).show()
+        supportFragmentManager.popBackStack()
+    }
+
+    private fun isOnePaneMode(): Boolean{
+        return habitItemContainer == null
+    }
+
+    private fun launchFragment(fragment: HabitItemFragment){
+        with(supportFragmentManager){
+            popBackStack()
+            beginTransaction()
+                .replace(habitItemContainer!!.id, fragment)
+                .addToBackStack(null)
+                .commit()
         }
     }
 
@@ -77,8 +108,13 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupOnFastClick() {
         habitListAdapter.onHabitItemClickListener = {
-            val intent = HabitItemActivity.newIntentEditItem(this, it.id)
-            startActivity(intent)
+            if(isOnePaneMode()) {
+                val intent = HabitItemActivity.newIntentEditItem(this, it.id)
+                startActivity(intent)
+            }
+            else{
+                launchFragment(HabitItemFragment.newInstanceEditItem(it.id))
+            }
         }
     }
 
